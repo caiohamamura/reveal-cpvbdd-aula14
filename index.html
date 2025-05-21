@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/night.css"> 
+		<link rel="stylesheet" href="dist/custom.css"> 
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/dracula.css">
+		<script src="plugin/leader-line.min.js"></script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<div style="height:100vh;display:flex;flex-direction: column;justify-content: space-between;">
+						<div style="background: url('img/fundo.png'); background-repeat: no-repeat; background-size: cover;width:100%;height:70%">
+							<div style="height:100%;display: flex;flex-direction: column; justify-content: space-between;">
+								<div style="display:flex;flex-direction: row; justify-content: space-between;margin:30px 30px;">
+									<span style="font-size:24pt">CPVBCDD - Banco de Dados 1</span>
+									<span style="font-size:24pt">Aula 14</span>
+								</div>
+								<h3 style="margin: 0 30px; margin-bottom:60px; align-content: end; justify-self:flex-end">
+									CRUD com Banco de Dados
+								</h3>
+							</div>
+						</div>
+						<div style="display:flex;flex-direction:row;margin-bottom:40px;justify-content: space-between;margin-inline:30px">
+							<div style="text-align: left;font-size:24pt">
+								<p>Prof. Caio Hamamura</p>
+								<p>hamamura.caio@ifsp.edu.br</p>
+							</div>
+							<img src="img/Artboard 1 copy 2.png" alt="">
+						</div>
+					</div>	
+				</section>
+
+
+
+				<section>
+					<img src="img/CRUD API.svg" alt="" style="height:100vh;">	
+				</section>
+
+
+
+
+				<section>
+					<style>:root { --code-font-size: 15.8px; }</style>
+					<div class="column" style="height:100vh;">
+						<div class="row" style="justify-content: center;">
+							<img src="img/olapessoa.png" width="600" class="fragment" data-fragment-index="3" alt="">
+						</div>
+						<div class="row">
+							<div class="column">
+								<img src="img/python.png" alt="" style="margin:0">
+								<div id="start-highlight" data-fragment-index="1" class="fragment" style="position: absolute;display: block;
+								width:370px;height: 25px; 
+								border-radius: 999px;
+								margin-top:135px;margin-left:35px;
+								z-index: 1;background-color: #FFFF0020;"></div>
+								<pre style="margin:0px;min-width:437px;font-size:var(--code-font-size)"><code class="python" data-trim data-no-escape>
+									
+@app.route('/')
+def inicio():
+    return render_template(
+		'index.j2',
+		variavel_enviada_pelo_app_py='Pessoa'
+	)
+									</code></pre>
+						</div>
+						<div class="column" style="justify-content: start;">
+							<img src="img/jinja.png" alt="" style="margin:0">
+							<div class="fragment" id="end-highlight" data-fragment-index="1" style="position: absolute;display: block;width:310px;height: 30px; border-radius: 999px;margin-top:74px;margin-left:80px;z-index: 1;background-color: #FFFF0020;"></div>
+							<pre style="margin:0px;min-width:476px;font-size:var(--code-font-size)"><code class="jinja" data-trim data-no-escape>
+&lt;body&gt;
+&lt;h1&gt;Olá {{variavel_enviada_pelo_app_py }}!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+								</code></pre>
+					</div>
+						
+						</div>
+				</div>
+				</section>
+
+
+				<section>
+					<div style="height:100vh;display:flex;flex-direction: column;justify-content: space-between;">
+						<div style="background: url('img/fundo.png'); background-repeat: no-repeat; background-size: cover;width:100%;height:70%">
+							<div style="height:100%;display: flex;flex-direction: column; justify-content: space-between;">
+								<div></div>
+								<h3 style="text-align:left;margin: 0 30px; margin-bottom:60px; align-content: end; justify-self:flex-end">
+									<p style="margin:0;color:tomato">CRUD</p>
+									<p style="margin:0"><span style="color:tomato">C</span>: CREATE (criar)</p>
+									<p style="margin:0"><span style="color:tomato">R</span>: READ (ler)</p> 
+									<p style="margin:0"><span style="color:tomato">U</span>: UPDATE (atualizar)</p>
+									<p style="margin:0"><span style="color:tomato">D</span>: DELETE (deletar)</p>
+								</h3>
+							</div>
+						</div>
+						<div style="display:flex;flex-direction:row;margin-bottom:100px;justify-content: space-between;margin-inline:30px">
+							<div style="text-align: left;font-size:24pt">
+							</div>
+							<!-- <p>Conteudo</p> -->
+						</div>
+					</div>	
+				</section>
+
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/zoom/zoom.js"></script>
+		
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				theme:'dracula',
+				transition:'zoom',
+				backgroundTransition: 'zoom',
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom ] 
+			});
+			let line = null;
+
+			Reveal.on('fragmentshown', (event) => {
+				console.log(event);
+				if (event.fragment.id === 'start-highlight') {
+					if (line === null) {
+						line = new LeaderLine(
+							document.getElementById('start-highlight'),
+							document.getElementById('end-highlight'),
+							{
+								color: '#359830', path: 'arc',
+							hide: true,
+						}
+						);
+					}
+					line.show('draw', {
+							duration: 500,
+							timing: [0.58, 0, 0.42, 1],
+							loop: true
+						});
+					
+				console.log(line);
+				}
+});
+			Reveal.on('fragmenthidden', (event) => {
+				if (event.fragment.id === 'start-highlight') {
+					line.hide('draw');
+				}
+			});
+
+			Reveal.on('slidechanged', (event) => {
+				if (line !== null) {
+					line.remove();
+					line = null;
+				}
+			});
+
+			
+		</script>
+	</body>
+</html>
+
