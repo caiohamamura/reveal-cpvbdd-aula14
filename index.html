@@ -50,7 +50,7 @@
 
 
 
-				<section>
+				<section data-transition="zoom-in slide-out">
 					<style>:root { --code-font-size: 15.8px; }</style>
 					<div class="column" style="height:100vh;">
 						<div class="row" style="justify-content: center;">
@@ -90,7 +90,7 @@ def inicio():
 				</section>
 
 
-				<section>
+				<section data-transition="slide-in zoom-out" data-background-transition="zoom-out">
 					<div style="height:100vh;display:flex;flex-direction: column;justify-content: space-between;">
 						<div style="background: url('img/fundo.png'); background-repeat: no-repeat; background-size: cover;width:100%;height:70%">
 							<div style="height:100%;display: flex;flex-direction: column; justify-content: space-between;">
@@ -105,13 +105,208 @@ def inicio():
 							</div>
 						</div>
 						<div style="display:flex;flex-direction:row;margin-bottom:100px;justify-content: space-between;margin-inline:30px">
-							<div style="text-align: left;font-size:24pt">
+							<div style="text-align: left;font-size:24pt"> 
 							</div>
 							<!-- <p>Conteudo</p> -->
 						</div>
 					</div>	
 				</section>
 
+				<section data-transition="fade-out" data-background-transition="fade-out">
+					<img src="/img/tarefas.png" alt="Imagem do aplicativo">
+					<div class="fragment current-visible fade-out" 
+						data-fragment-index="1"
+						style="position: absolute;display: block;
+						width:510px;
+						height: 240px; border-radius: 21px;
+						margin-top:-400px;
+						margin-left:130px; z-index: 1;background-color: #FFFF0050;
+						align-content: center;
+						color: black;
+						font-weight: bolder;">
+						LER (Read)</div>
+					<div class="fragment fade-in current-visible"
+					data-fragment-index="2"
+						style="position: absolute;display: block;
+						width:660px;
+						height: 80px; border-radius: 21px;
+						margin-top:-120px;
+						margin-left:130px; z-index: 1;background-color: #FFFF0050;
+						align-content: center;
+						color: black;
+						font-weight: bolder;">
+						CRIAR (Create)</div>
+					<div class="fragment fade-in fade-out current-visible"
+					data-fragment-index="3"
+						style="position: absolute;display: block;
+						width:70px;
+						height: 130px; border-radius: 21px;
+						margin-top:-300px;
+						margin-left:681px; z-index: 1;background-color: #FFFF0050;
+						align-content: center;
+						color: black;
+						font-weight: bolder;">
+						EDITAR (Edit)</div>
+						<div class="fragment fade-in"
+						data-fragment-index="4"
+						style="position: absolute;display: block;
+						width:70px;
+						height: 130px; border-radius: 21px;
+						margin-top:-300px;
+						margin-left:738px; z-index: 1;background-color: #ff634780; 
+						align-content: center; 
+						color: white;
+						text-shadow: #000 1px 1px 1px;
+						font-weight: bolder;">
+						APAGAR (Delete)</div>
+				</section>
+
+
+				<section data-markdown>
+					<textarea data-template>
+					<!-- .slide: data-transition-background='convex-in zoom-out' data-transition="convex-in zoom-out" -->
+					## Lendo (Read) com Python Flask
+					1. Vamos começar realizando criando um banco de dados aula14
+					1. Vamos criar uma tabela de afazeres
+					1. Inserir dados
+					2. Vamos criar uma rota para listar os afazeres
+					3. Template de afazeres
+					
+					---
+					## 1. Criando o banco de dados
+						CREATE DATABASE IF NOT EXISTS aula14;
+						
+						USE aula14;
+						
+						CREATE TABLE IF NOT EXISTS afazeres (
+							id INT PRIMARY KEY AUTO_INCREMENT,
+							conteudo VARCHAR(100) NOT NULL
+						);
+
+						INSERT INTO afazeres (conteudo) 
+						VALUES ('Aprender a integrar Banco de Dados na Web!');
+
+					---
+					## 2. Criando uma rota para listar os afazeres	
+						from sqlalchemy import create_engine, text
+
+						engine = create_engine('mysql+pymysql://root@localhost:3308/aula14')
+
+						def consulta(sql):
+							with engine.connect() as conn:
+								result = conn.execute(text(sql))
+								conn.commit()
+								return result
+
+						@app.route('/')
+						def listar_afazeres():
+							afazeres = consulta('SELECT * FROM afazeres').mappings().all()
+							return render_template('index.j2', afazeres=afazeres)
+
+					---
+					<!-- .slide: data-transition-background='zoom-in' data-transition="zoom-in fade-out" -->
+					## 3. Template de afazeres
+						<h1>Lista de afazeres</h1>
+						{% for afazer in afazeres %}
+							<hr> <!-- Cria linha horizontal -->
+							{{ afazer.conteudo }}
+						{% endfor %}
+						<hr>
+
+					---
+					<!-- .slide: data-transition-background='convex-in zoom-out' data-transition="convex-in zoom-out" -->
+					## Criando (Create) com Python Flask
+					1. Vamos adicionar um formulário no template para criar o afazer
+					2. Em seguida vamos criar uma rota para criar o afazer
+
+					---
+					## 1. Adicionando um formulário no template
+						<form method="POST" action="/criar">
+							<input type="text" name="conteudo">
+							<button type="submit">Criar</button>
+						</form>
+					
+					---
+					<!-- .slide: data-transition-background='zoom-in' data-transition="zoom-in fade-out" -->					
+					## 2. Criando uma rota para criar o afazer
+						@app.route('/criar', methods=['POST'])
+						def criar_afazer():
+							conteudo = request.form['conteudo']
+							consulta(f'INSERT INTO afazeres (conteudo) VALUES ("{conteudo}")')
+							return redirect('/')
+
+					---
+					
+					<!-- .slide: data-transition-background='convex-in zoom-out' data-transition="convex-in zoom-out" -->
+					## Apagando (Delete) com Python Flask
+					1. Vamos criar um botão para apagar
+					2. Vamos criar uma rota para apagar o afazer
+
+					---
+					## 1. Adicionando um botão para apagar
+						{% for afazer in afazeres %}
+							<hr> <!-- Cria linha horizontal -->
+							<div style="display: flex; justify-content: space-between;">
+								<span>{{ afazer.conteudo }}</span>
+								<form action="apagar/{{ afazer.id }}" method="POST">
+									<button type="submit">Apagar</button>
+								</form>
+							</div>
+						{% endfor %}
+					
+					---
+					<!-- .slide: data-transition-background='zoom-in' data-transition="zoom-in fade-out" -->
+					## 2. Criando uma rota para apagar o afazer
+						@app.route('/apagar/<int:id>', methods=['POST'])
+						def apagar_afazer(id):
+							consulta(f'DELETE FROM afazeres WHERE id = {id}')
+							return redirect('/')
+
+					---
+					<!-- .slide: data-transition-background='convex-in zoom-out' data-transition="convex-in zoom-out" -->
+					## Editando (Update) com Python Flask 
+					1. Fazer um link para editar o afazer
+					1. Criar um formulário para editar o afazer
+					2. Criar uma rota para editar o afazer
+
+					---
+					## 1. Fazer um link para editar o afazer
+						{% for afazer in afazeres %}
+							<hr> <!-- Cria linha horizontal -->
+							<div style="display: flex; justify-content: space-between;">
+								<span>{{ afazer.conteudo }}</span>
+								<div>
+								    <a href="editar/{{ afazer.id }}">Editar</a>
+								    <!-- Manter o botão de apagar -->
+							    </div>
+							</div>
+						{% endfor %}
+
+
+					---
+					## 2. Adicionando um formulário para editar o afazer
+						<h1>Editar o afazer:</h1>
+						<form method="POST" action="/editar/{{ afazer.id }}">
+							<input type="text" name="conteudo" value="{{ afazer.conteudo }}">
+							<button type="submit">Editar</button>
+						</form>
+
+					---
+					<!-- .slide: data-transition-background='zoom-in' data-transition="zoom-in fade-out" -->
+					## 3 . Criando uma rota para editar o afazer
+						@app.route('/editar/<int:id>', methods=['POST'])
+						def editar_afazer(id):
+							conteudo = request.form['conteudo']
+							consulta(f'UPDATE afazeres SET conteudo = "{conteudo}" WHERE id = {id}')
+							return redirect('/')
+					
+					---
+					<!-- .slide: data-transition-background='concave-in zoom-out' data-transition="concave-in zoom-out" -->
+					# Bons estudos!
+					
+					</textarea>
+
+				</section>
 			</div>
 		</div>
 
